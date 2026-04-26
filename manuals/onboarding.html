@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>インターン 初回セットアップガイド</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Hiragino Sans", "Meiryo", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #1e293b;
+    background: #f8fafc;
+    padding: 48px 24px;
+  }
+  .wrap { max-width: 800px; margin: 0 auto; }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 48px;
+  }
+
+  h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 48px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+  h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #334155;
+    margin: 24px 0 8px;
+  }
+  p { margin-bottom: 12px; }
+
+  .card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+  }
+
+  .step-list { list-style: none; counter-reset: steps; }
+  .step-list li {
+    counter-increment: steps;
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .step-list li::before {
+    content: counter(steps);
+    min-width: 28px;
+    height: 28px;
+    background: #3b82f6;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-list li .body { flex: 1; }
+  .step-list li .label { font-weight: 700; margin-bottom: 4px; }
+
+  code {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+  }
+  pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 12px 0;
+  }
+
+  .badge {
+    display: inline-block;
+    background: #eff6ff;
+    color: #3b82f6;
+    border: 1px solid #bfdbfe;
+    border-radius: 4px;
+    padding: 1px 8px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .badge.green { background: #f0fdf4; color: #16a34a; border-color: #bbf7d0; }
+  .badge.gray  { background: #f8fafc; color: #64748b; border-color: #e2e8f0; }
+
+  .command-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  .command-table th, .command-table td {
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 14px;
+  }
+  .command-table th { background: #f8fafc; font-weight: 700; color: #475569; }
+  .command-table tr:last-child td { border-bottom: none; }
+
+  .note {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 14px;
+    color: #92400e;
+    margin: 16px 0;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>インターン 初回セットアップガイド</h1>
+  <p class="subtitle">Claude Codeのインストールから作業開始までの手順</p>
+
+  <!-- SECTION 1 -->
+  <h2>1. Claude Codeとは何か</h2>
+  <div class="card">
+    <p>Claude Codeは、AIアシスタント（Claude）をターミナル・VSCode上で使えるツールです。</p>
+    <p>インターンの作業（記事更新・順位施策）は、このClaude Codeを使ってコマンドを呼び出すことで進めます。Claudeがスプレッドシートの読み書き・競合分析・HTML出力まで自動でやってくれるので、<strong>インターンはデータを入力してClaude に指示するだけ</strong>で作業が完結します。</p>
+  </div>
+
+  <!-- SECTION 2 -->
+  <h2>2. セットアップ手順</h2>
+
+  <ol class="step-list">
+    <li>
+      <div class="body">
+        <div class="label">Claude Codeをインストールする</div>
+        <p>以下のURLからClaude Codeデスクトップアプリをダウンロードしてインストールしてください。</p>
+        <p>インストール後、Anthropicアカウントでサインインしてください（アカウント情報は別途共有します）。</p>
+      </div>
+    </li>
+    <li>
+      <div class="body">
+        <div class="label">リポジトリをクローンする</div>
+        <p>ターミナル（Windowsならコマンドプロンプト or PowerShell）を開いて以下を実行してください。</p>
+        <pre>git clone https://github.com/plusms/intern-claudeprojects.git</pre>
+        <p>デスクトップなど、わかりやすい場所で実行してください。<code>intern-claudeprojects</code>というフォルダが作成されます。</p>
+      </div>
+    </li>
+    <li>
+      <div class="body">
+        <div class="label">Claude CodeでフォルダをProjectとして開く</div>
+        <p>Claude Codeを起動し、「Add Project」から先ほどクローンした<code>intern-claudeprojects</code>フォルダを選択してください。</p>
+        <p>これでコマンド（<code>/knowhow-update</code>など）が使える状態になります。</p>
+      </div>
+    </li>
+    <li>
+      <div class="body">
+        <div class="label">Google Sheets MCPを設定する</div>
+        <p>スプレッドシートの読み書きに必要な設定です。以下の手順で設定してください。</p>
+        <p>（設定方法は別途担当者から共有します）</p>
+        <div class="note">この設定が完了しないとスプシの自動読み書きができません。必ず設定してから作業を開始してください。</div>
+      </div>
+    </li>
+  </ol>
+
+  <!-- SECTION 3 -->
+  <h2>3. 使えるコマンド一覧</h2>
+  <div class="card">
+    <table class="command-table">
+      <tr>
+        <th>コマンド</th>
+        <th>用途</th>
+        <th>タイミング</th>
+      </tr>
+      <tr>
+        <td><code>/knowhow-update</code></td>
+        <td>ノウハウ記事の更新</td>
+        <td>毎出勤時</td>
+      </tr>
+      <tr>
+        <td><code>/cv-update-analyze</code></td>
+        <td>CV記事の分析・改修方針案の作成</td>
+        <td>担当記事が来たとき</td>
+      </tr>
+      <tr>
+        <td><code>/cv-update-edit</code></td>
+        <td>社員承認後のHTML改修・WP実装</td>
+        <td>社員からSlack通知を受けたとき</td>
+      </tr>
+      <tr>
+        <td><code>/rank-local</code></td>
+        <td>地域記事の順位施策</td>
+        <td>担当記事が来たとき</td>
+      </tr>
+      <tr>
+        <td><code>/sync</code></td>
+        <td>コマンドを最新版に更新</td>
+        <td>「更新しました」と言われたとき</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- SECTION 4 -->
+  <h2>4. コマンドの最新版に更新する方法</h2>
+  <div class="card">
+    <p>担当者がコマンドを更新したときはSlackで連絡が来ます。その際は以下の手順で最新版に更新してください。</p>
+    <ol class="step-list">
+      <li>
+        <div class="body">
+          <div class="label">Claude Codeを開く</div>
+        </div>
+      </li>
+      <li>
+        <div class="body">
+          <div class="label">チャットに <code>/sync</code> と入力する</div>
+          <p>「GitHubから最新版を手元に反映します。よいですか？」と表示されるので「はい」と答えてください。</p>
+        </div>
+      </li>
+      <li>
+        <div class="body">
+          <div class="label">「最新版に更新しました。」と表示されたら完了</div>
+        </div>
+      </li>
+    </ol>
+  </div>
+
+  <!-- SECTION 5 -->
+  <h2>5. 困ったときは</h2>
+  <div class="card">
+    <p>Claudeが止まった・エラーが出た・どうすればいいかわからないときは、そのままClaudeに状況を伝えてください。多くの場合、Claudeが次にすべきことを教えてくれます。</p>
+    <p>それでも解決しない場合は担当者にSlackで連絡してください。</p>
+  </div>
+
+</div>
+</body>
+</html>

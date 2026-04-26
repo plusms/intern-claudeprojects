@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV記事更新マニュアル</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Hiragino Sans", "Meiryo", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #1e293b;
+    background: #f8fafc;
+    padding: 48px 24px;
+  }
+  .wrap { max-width: 800px; margin: 0 auto; }
+
+  h1 { font-size: 26px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+  .subtitle { font-size: 14px; color: #64748b; margin-bottom: 48px; }
+  h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 48px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+  h3 { font-size: 15px; font-weight: 700; color: #334155; margin: 24px 0 8px; }
+  p { margin-bottom: 12px; }
+
+  .card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+  }
+
+  .phase {
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+  .phase-header {
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .phase-header.blue { background: #eff6ff; border-bottom: 2px solid #bfdbfe; }
+  .phase-header.green { background: #f0fdf4; border-bottom: 2px solid #bbf7d0; }
+  .phase-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .phase-num.blue { background: #3b82f6; color: #fff; }
+  .phase-num.green { background: #16a34a; color: #fff; }
+  .phase-title { font-size: 16px; font-weight: 700; }
+  .phase-cmd { font-size: 13px; color: #64748b; margin-left: auto; }
+  .phase-body { padding: 24px 28px; background: #fff; }
+
+  .step {
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .step:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .step-num {
+    width: 24px;
+    height: 24px;
+    background: #94a3b8;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-title { font-size: 15px; font-weight: 700; color: #0f172a; }
+
+  .role-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 8px;
+    align-items: flex-start;
+  }
+  .role-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .role-intern { background: #eff6ff; color: #3b82f6; border: 1px solid #bfdbfe; }
+  .role-claude { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+  .role-staff  { background: #fdf4ff; color: #9333ea; border: 1px solid #e9d5ff; }
+
+  code {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+  }
+
+  .note {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 14px;
+    color: #92400e;
+    margin: 12px 0;
+  }
+  .info {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 14px;
+    color: #1e40af;
+    margin: 12px 0;
+  }
+
+  .flow-overview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+  .flow-box {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .flow-arrow { color: #94a3b8; font-size: 18px; }
+
+  .type-table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  .type-table th, .type-table td {
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 14px;
+  }
+  .type-table th { background: #f8fafc; font-weight: 700; color: #475569; }
+  .type-table tr:last-child td { border-bottom: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>CV記事更新マニュアル</h1>
+  <p class="subtitle">コマンド：<code>/cv-update-analyze</code>　<code>/cv-update-edit</code></p>
+
+  <!-- SECTION 1 -->
+  <h2>1. 全体の流れ</h2>
+  <div class="card">
+    <div class="flow-overview">
+      <div class="flow-box">① インターン<br>F〜L列を入力</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box">② インターン<br>/cv-update-analyze<br>を実行</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box">③ 社員<br>P列に採用番号<br>を記入</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box">④ インターン<br>/cv-update-edit<br>でHTML実装</div>
+    </div>
+    <p style="margin-top:16px">② と ④ のあいだに社員の確認ステップがあります。③が完了したとSlackで通知が来るまで④は始めないでください。</p>
+  </div>
+
+  <!-- SECTION 2 -->
+  <h2>2. フェーズ① 分析・方針案の作成</h2>
+
+  <div class="phase">
+    <div class="phase-header blue">
+      <div class="phase-num blue">1</div>
+      <div class="phase-title">スプレッドシートにデータを入力する</div>
+    </div>
+    <div class="phase-body">
+      <p>担当記事のスプレッドシート（維持記事管理シート）を開き、F〜L列に以下を入力してください。</p>
+      <table class="type-table">
+        <tr><th>列</th><th>入力内容</th><th>取得方法</th></tr>
+        <tr><td>F列</td><td>AI概要（メインKW）</td><td>GoogleでメインKWを検索してAI概要をコピー。なければ「表示なし」</td></tr>
+        <tr><td>G列</td><td>PAA（メインKW）</td><td>「他の人はこちらも質問」欄の質問を3つコピー</td></tr>
+        <tr><td>H列</td><td>関連KW（メインKW）</td><td>検索画面下部「関連する検索」をすべてコピー</td></tr>
+        <tr><td>I列</td><td>AI概要（サブKW）</td><td>サブKWでも同様に検索</td></tr>
+        <tr><td>J列</td><td>PAA（サブKW）</td><td>同上</td></tr>
+        <tr><td>K列</td><td>関連KW（サブKW）</td><td>同上</td></tr>
+        <tr><td>L列</td><td>競合URL</td><td>メインKWで検索して上位3件のURLをコピー（自社サイトを除く）</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header blue">
+      <div class="phase-num blue">2</div>
+      <div class="phase-title">/cv-update-analyze を実行する</div>
+    </div>
+    <div class="phase-body">
+
+      <div class="step">
+        <div class="step-header">
+          <div class="step-num">1</div>
+          <div class="step-title">コマンドを起動する</div>
+        </div>
+        <div class="role-row">
+          <span class="role-badge role-intern">インターン</span>
+          <span>チャットに <code>/cv-update-analyze</code> と入力して送信する</span>
+        </div>
+        <div class="role-row">
+          <span class="role-badge role-claude">Claude</span>
+          <span>今週が奇数週（SERP分析）か偶数週（ヒートマップ分析）かを自動判定し、対象記事を提示する</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header">
+          <div class="step-num">2</div>
+          <div class="step-title">【SERP分析週】Claudeが自動で競合・SERPを分析する</div>
+        </div>
+        <div class="role-row">
+          <span class="role-badge role-claude">Claude</span>
+          <span>スプシのF〜L列を読み込み、競合URLの構成を自動取得して改修方針案をN列に書き込む</span>
+        </div>
+        <div class="role-row">
+          <span class="role-badge role-intern">インターン</span>
+          <span>スプシへの書き込み確認が出たら「はい」と答える。それ以外は待つだけ</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header">
+          <div class="step-num">2</div>
+          <div class="step-title">【ヒートマップ分析週】Clarityのスクショを貼り付ける</div>
+        </div>
+        <div class="role-row">
+          <span class="role-badge role-claude">Claude</span>
+          <span>スクショの貼り付けを依頼するメッセージを出す</span>
+        </div>
+        <div class="role-row">
+          <span class="role-badge role-intern">インターン</span>
+          <div>
+            <p>Clarityで対象記事を開き、以下の3枚のスクショを撮ってチャットに貼り付ける：</p>
+            <p>① クリックヒートマップ画面</p>
+            <p>② スクロールヒートマップ画面</p>
+            <p>③ アテンションヒートマップ画面</p>
+          </div>
+        </div>
+        <div class="role-row">
+          <span class="role-badge role-claude">Claude</span>
+          <span>スクショを分析して改修方針案をO列に書き込む</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header">
+          <div class="step-num">3</div>
+          <div class="step-title">社員にSlackで通知する</div>
+        </div>
+        <div class="role-row">
+          <span class="role-badge role-claude">Claude</span>
+          <span>Slackで送るテキストを出力する</span>
+        </div>
+        <div class="role-row">
+          <span class="role-badge role-intern">インターン</span>
+          <span>Claudeが出力したテキストをコピーして、担当社員にSlackで送る</span>
+        </div>
+        <div class="note">社員からP列に採用番号を記入したと連絡が来るまで、次のフェーズには進まないでください。</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <h2>3. フェーズ② 社員承認後の実装</h2>
+
+  <div class="phase">
+    <div class="phase-header green">
+      <div class="phase-num green">3</div>
+      <div class="phase-title">/cv-update-edit を実行する</div>
+    </div>
+    <div class="phase-body">
+
+      <div class="info">社員からSlackで「P列に記入しました」と連絡が来てから始めてください。</div>
+
+      <div class="step">
+        <div class="step-header">
+          <div class="step-num">1</div>
+          <div class="step-title">コマンドを起動する</div>
+        </div>
+        <div class="role-row">
+          <span class="role-badge role-intern">インターン</span>
+          <span>チャットに <code>/cv-update-edit</code> と入力して送信する</span>
+        </div>
+        <div class="role-row">
+          <span class="role-badge role-claude">Claude</span>
+          <span>スプシのP列を読み込み、採用された改修方針を表示する</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header">
+          <div class="step-num">2</div>
+          <div class="step-title">記事のHTMLをWordPressからコピーして貼り付ける</div>
+        </div>
+        <div class="role-row">
+          <span class="role-badge role-claude">Claude</span>
+          <span>HTMLの貼り付けを依頼するメッセージを出す</span>
+        </div>
+        <div class="role-row">
+          <span class="role-badge role-intern">インターン</span>
+          <div>
+            <p>WordPressの管理画面で対象記事を開く</p>
+            <p>右上の「テキスト」タブをクリック → 全文コピー（Ctrl+A → Ctrl+C） → Claudeに貼り付けて送信</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header">
+          <div class="step-num">3</div>
+          <div class="step-title">Claudeが出力したHTMLをWordPressに貼り付ける</div>
+        </div>
+        <div class="role-row">
+          <span class="role-badge role-claude">Claude</span>
+          <span>改修箇所のHTML差分を出力する。貼り付け場所も同時に指示する</span>
+        </div>
+        <div class="role-row">
+          <span class="role-badge role-intern">インターン</span>
+          <span>Claudeの指示に従ってHTMLをWordPressの「テキスト」タブに貼り付け、「更新」ボタンをクリックする</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header">
+          <div class="step-num">4</div>
+          <div class="step-title">完了を報告する</div>
+        </div>
+        <div class="role-row">
+          <span class="role-badge role-intern">インターン</span>
+          <span>WordPressの更新が完了したら「完了しました」とClaudeに伝える</span>
+        </div>
+        <div class="role-row">
+          <span class="role-badge role-claude">Claude</span>
+          <span>スプシのM列（更新完了日）に今日の日付を自動で書き込む</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <h2>4. よくある質問</h2>
+
+  <div class="card">
+    <h3>社員からの返信が来ない場合は？</h3>
+    <p>Slackで再度リマインドしてください。<code>/cv-update-edit</code> はP列が記入されていないと正しく動きません。</p>
+  </div>
+
+  <div class="card">
+    <h3>ヒートマップ週なのにClarityにデータがない</h3>
+    <p>「データがありません」とClaudeに伝えてください。スキップして次の記事に進みます。</p>
+  </div>
+
+  <div class="card">
+    <h3>HTMLの貼り付け場所がわからない</h3>
+    <p>ClaudeがHTMLと一緒に「〇〇の直後」など具体的に指示します。それに従ってください。わからない場合はClaudeにもう一度聞いてください。</p>
+  </div>
+
+</div>
+</body>
+</html>

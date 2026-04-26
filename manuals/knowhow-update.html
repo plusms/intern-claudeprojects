@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ノウハウ記事更新マニュアル</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Hiragino Sans", "Meiryo", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #1e293b;
+    background: #f8fafc;
+    padding: 48px 24px;
+  }
+  .wrap { max-width: 800px; margin: 0 auto; }
+
+  h1 { font-size: 26px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+  .subtitle { font-size: 14px; color: #64748b; margin-bottom: 48px; }
+  h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 48px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+  h3 { font-size: 15px; font-weight: 700; color: #334155; margin: 24px 0 8px; }
+  p { margin-bottom: 12px; }
+
+  .card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+  }
+
+  .step {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+  }
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .step-num {
+    width: 32px;
+    height: 32px;
+    background: #3b82f6;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-title { font-size: 16px; font-weight: 700; color: #0f172a; }
+
+  .role-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+  .role-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .role-intern { background: #eff6ff; color: #3b82f6; border: 1px solid #bfdbfe; }
+  .role-claude { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+
+  code {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+  }
+  pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 12px 0;
+  }
+
+  .note {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 14px;
+    color: #92400e;
+    margin: 16px 0;
+  }
+  .info {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 14px;
+    color: #1e40af;
+    margin: 16px 0;
+  }
+
+  .type-table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  .type-table th, .type-table td {
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 14px;
+  }
+  .type-table th { background: #f8fafc; font-weight: 700; color: #475569; }
+  .type-table tr:last-child td { border-bottom: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>ノウハウ記事更新マニュアル</h1>
+  <p class="subtitle">コマンド：<code>/knowhow-update</code>　　毎出勤時に実行</p>
+
+  <!-- SECTION 1 -->
+  <h2>1. このコマンドでやること</h2>
+  <div class="card">
+    <p>担当サイトのノウハウ記事を、最長2週間に1度のペースで更新します。1回の作業で3記事を順番に進めます。</p>
+    <p>更新の方法は週によって異なります。</p>
+    <table class="type-table">
+      <tr>
+        <th>週の種類</th>
+        <th>更新方法</th>
+        <th>インターンの作業</th>
+      </tr>
+      <tr>
+        <td><strong>競合分析週</strong>（奇数週）</td>
+        <td>競合記事との比較で不足トピックを補強</td>
+        <td>Claudeが自動で競合を調査。インターンはトピック選択とHTMLのコピペのみ</td>
+      </tr>
+      <tr>
+        <td><strong>SERPチェック週</strong>（偶数週）</td>
+        <td>GoogleのAI概要・関連質問をもとにトピックを補強</td>
+        <td>Google検索結果のデータをClaudeに貼り付けてトピック選択・HTMLのコピペ</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- SECTION 2 -->
+  <h2>2. 作業の流れ</h2>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <div class="step-title">コマンドを起動する</div>
+    </div>
+    <div class="role-row">
+      <span class="role-badge role-intern">インターン</span>
+      <span>Claude Codeのチャットに <code>/knowhow-update</code> と入力して送信する</span>
+    </div>
+    <div class="role-row">
+      <span class="role-badge role-claude">Claude</span>
+      <span>今週が奇数週（競合分析）か偶数週（SERPチェック）かを自動判定し、対象の3記事を提示する</span>
+    </div>
+    <div class="info">提示された3記事を確認して「はい」や「OK」と答えると次に進みます。</div>
+  </div>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <div class="step-title">【競合分析週のみ】Claudeが競合を自動調査する</div>
+    </div>
+    <div class="role-row">
+      <span class="role-badge role-claude">Claude</span>
+      <span>メインキーワードで検索し、上位3記事の構成を自動取得して自社記事との差分を分析する</span>
+    </div>
+    <div class="role-row">
+      <span class="role-badge role-intern">インターン</span>
+      <span>待つだけ（操作不要）</span>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <div class="step-title">【SERPチェック週のみ】検索結果を貼り付ける</div>
+    </div>
+    <div class="role-row">
+      <span class="role-badge role-claude">Claude</span>
+      <span>以下の入力を依頼するメッセージを出す</span>
+    </div>
+    <div class="role-row">
+      <span class="role-badge role-intern">インターン</span>
+      <div>
+        <p>Googleで対象記事のメインキーワードを検索し、以下をコピーしてClaudeに貼り付ける：</p>
+        <p>① AI概要（画面上部に表示される青いボックス）：全文コピー。表示がなければ「表示なし」と入力</p>
+        <p>② 他の人はこちらも質問（PAA）：表示されている質問を上から3つ</p>
+        <p>③ 関連する検索：画面下部の一覧をすべて</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <div class="step-title">追加するトピックを1つ選ぶ</div>
+    </div>
+    <div class="role-row">
+      <span class="role-badge role-claude">Claude</span>
+      <span>自社記事に不足しているトピック候補を番号付きで提示する</span>
+    </div>
+    <div class="role-row">
+      <span class="role-badge role-intern">インターン</span>
+      <span>候補の中から<strong>1つだけ</strong>番号で選ぶ（例：「①」）</span>
+    </div>
+    <div class="note">1回の更新で追加するのは1トピックだけです。複数選ばないでください。</div>
+  </div>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">4</div>
+      <div class="step-title">記事のHTMLをWordPressからコピーして貼り付ける</div>
+    </div>
+    <div class="role-row">
+      <span class="role-badge role-claude">Claude</span>
+      <span>HTMLの貼り付けを依頼するメッセージを出す</span>
+    </div>
+    <div class="role-row">
+      <span class="role-badge role-intern">インターン</span>
+      <div>
+        <p>WordPressの管理画面で対象記事を開き、以下の手順でHTMLをコピーする：</p>
+        <p>① 右上の「テキスト」タブをクリック（「ビジュアル」の隣）</p>
+        <p>② 表示されたHTMLをすべて選択（Ctrl+A）してコピー（Ctrl+C）</p>
+        <p>③ Claudeのチャットに貼り付けて送信</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">5</div>
+      <div class="step-title">Claudeが出力したHTMLをWordPressに貼り付ける</div>
+    </div>
+    <div class="role-row">
+      <span class="role-badge role-claude">Claude</span>
+      <span>追加するHTML差分を出力する</span>
+    </div>
+    <div class="role-row">
+      <span class="role-badge role-intern">インターン</span>
+      <div>
+        <p>Claudeが出力したHTMLを、WordPressの「テキスト」タブの適切な場所に貼り付けて「更新」ボタンをクリックする</p>
+        <p>貼り付け場所はClaudeが「〇〇の直後に追加」と指示するので、それに従う</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">6</div>
+      <div class="step-title">完了を報告してスプシを更新する</div>
+    </div>
+    <div class="role-row">
+      <span class="role-badge role-intern">インターン</span>
+      <span>WordPressに実装が完了したら「完了しました」とClaudeに伝える</span>
+    </div>
+    <div class="role-row">
+      <span class="role-badge role-claude">Claude</span>
+      <span>スプレッドシートの更新完了日・次回タイプ・改修メモを自動で書き込む</span>
+    </div>
+    <p style="margin-top:12px">1記事完了したら次の記事へ。3記事分繰り返す。</p>
+  </div>
+
+  <!-- SECTION 3 -->
+  <h2>3. よくある質問</h2>
+
+  <div class="card">
+    <h3>SERPチェック週なのにAI概要が表示されない</h3>
+    <p>「表示なし」とClaudeに伝えてください。PAA・関連する検索だけ貼り付ければ分析を進めてくれます。</p>
+  </div>
+
+  <div class="card">
+    <h3>候補のトピックがどれも難しそう</h3>
+    <p>迷ったらClaudeに「どれが一番短時間で対応できますか？」と聞いてください。アドバイスしてくれます。</p>
+  </div>
+
+  <div class="card">
+    <h3>HTMLの貼り付け場所がわからない</h3>
+    <p>ClaudeがHTMLを出力する際に貼り付け場所も一緒に指示します。「〇〇の見出しの直後」など具体的に書かれているので、それに従ってください。</p>
+  </div>
+
+</div>
+</body>
+</html>
