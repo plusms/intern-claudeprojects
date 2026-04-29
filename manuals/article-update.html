@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>記事更新フロー</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Hiragino Sans", "Meiryo", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #1e293b;
+    background: #f8fafc;
+    padding: 48px 24px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+
+  h1 { font-size: 26px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+  .subtitle { font-size: 14px; color: #64748b; margin-bottom: 48px; }
+  h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 56px 0 20px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+  h3 { font-size: 15px; font-weight: 700; color: #334155; margin: 24px 0 10px; }
+
+  /* ---- 担当バッジ ---- */
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    vertical-align: middle;
+    margin-left: 6px;
+  }
+  .badge-intern  { background: #dbeafe; color: #1d4ed8; }
+  .badge-claude  { background: #ede9fe; color: #6d28d9; }
+  .badge-staff   { background: #dcfce7; color: #15803d; }
+
+  /* ---- 月次スケジュール ---- */
+  .schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .week-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .week-header {
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .week-header.w1 { background: #f1f5f9; color: #475569; }
+  .week-header.w2 { background: #eff6ff; color: #1d4ed8; }
+  .week-header.w3 { background: #fdf4ff; color: #7e22ce; }
+  .week-header.w4 { background: #eff6ff; color: #1d4ed8; }
+  .week-body { padding: 12px 14px; }
+  .week-tag {
+    display: block;
+    font-size: 12px;
+    padding: 3px 0;
+    color: #475569;
+  }
+  .week-tag::before { content: "▸ "; color: #94a3b8; }
+  .week-tag.highlight { color: #1d4ed8; font-weight: 600; }
+  .week-tag.purple { color: #7e22ce; font-weight: 600; }
+
+  /* ---- フロー図 ---- */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 16px 0 32px;
+  }
+  .flow-row {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+  }
+  .flow-step {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 4px;
+  }
+  .flow-step.claude  { border-left: 4px solid #a78bfa; }
+  .flow-step.intern  { border-left: 4px solid #60a5fa; }
+  .flow-step.staff   { border-left: 4px solid #34d399; }
+  .flow-step .step-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+  .flow-step.claude .step-label  { color: #7c3aed; }
+  .flow-step.intern .step-label  { color: #2563eb; }
+  .flow-step.staff  .step-label  { color: #059669; }
+  .flow-step .step-title { font-size: 14px; font-weight: 700; color: #0f172a; }
+  .flow-step .step-desc  { font-size: 13px; color: #64748b; margin-top: 4px; line-height: 1.6; }
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 20px;
+    padding: 0 4px;
+    flex-shrink: 0;
+  }
+
+  /* ---- コマンドカード ---- */
+  .cmd-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .cmd-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .cmd-name {
+    font-size: 14px;
+    font-weight: 700;
+    font-family: monospace;
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 2px 10px;
+    border-radius: 6px;
+  }
+  .cmd-desc { font-size: 13px; color: #64748b; }
+  .cmd-body { padding: 16px 20px; }
+  .cmd-steps { list-style: none; }
+  .cmd-steps li {
+    display: flex;
+    gap: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 13px;
+    align-items: flex-start;
+  }
+  .cmd-steps li:last-child { border-bottom: none; }
+  .step-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-num.purple { background: #ede9fe; color: #6d28d9; }
+  .step-num.blue   { background: #dbeafe; color: #1d4ed8; }
+  .step-num.green  { background: #dcfce7; color: #15803d; }
+
+  /* ---- スプシ列表 ---- */
+  .col-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
+  .col-table th {
+    background: #f1f5f9;
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 700;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+  }
+  .col-table td {
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0;
+    vertical-align: top;
+  }
+  .col-table tr:hover td { background: #f8fafc; }
+  .col-who { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 999px; white-space: nowrap; }
+  .col-intern { background: #dbeafe; color: #1d4ed8; }
+  .col-claude { background: #ede9fe; color: #6d28d9; }
+  .col-staff  { background: #dcfce7; color: #15803d; }
+  .col-fixed  { background: #f1f5f9; color: #475569; }
+
+  /* ---- ノウハウフロー ---- */
+  .kh-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .kh-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .kh-header {
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .kh-header.odd  { background: #fff7ed; color: #c2410c; }
+  .kh-header.even { background: #f0fdf4; color: #15803d; }
+  .kh-body { padding: 12px 16px; font-size: 13px; color: #475569; }
+  .kh-body li { margin-bottom: 4px; padding-left: 4px; }
+
+  /* ---- 凡例 ---- */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #475569;
+  }
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>記事更新フロー</h1>
+  <p class="subtitle">CV記事・ノウハウ記事 定期更新の全体設計</p>
+
+  <!-- 凡例 -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div>Claude が実行</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#60a5fa"></div>インターン が実行</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div>社員 が実行</div>
+  </div>
+
+  <!-- ======== 月次スケジュール ======== -->
+  <h2>月次スケジュール（CV記事）</h2>
+
+  <div class="schedule-grid">
+    <div class="week-card">
+      <div class="week-header w1">W1</div>
+      <div class="week-body">
+        <span class="week-tag highlight">/cv-update-urls</span>
+        <span class="week-tag" style="color:#94a3b8; font-size:12px;">競合URLチェックのみ</span>
+      </div>
+    </div>
+    <div class="week-card">
+      <div class="week-header w2">W2</div>
+      <div class="week-body">
+        <span class="week-tag highlight">/cv-update-urls</span>
+        <span class="week-tag highlight">/cv-update-analyze</span>
+        <span class="week-tag" style="color:#94a3b8; font-size:12px;">競合 + AIO/関連KW分析</span>
+      </div>
+    </div>
+    <div class="week-card">
+      <div class="week-header w3">W3</div>
+      <div class="week-body">
+        <span class="week-tag highlight">/cv-update-urls</span>
+        <span class="week-tag purple">/cv-update-heatmap</span>
+        <span class="week-tag" style="color:#94a3b8; font-size:12px;">競合 + ヒートマップ分析</span>
+      </div>
+    </div>
+    <div class="week-card">
+      <div class="week-header w4">W4</div>
+      <div class="week-body">
+        <span class="week-tag highlight">/cv-update-urls</span>
+        <span class="week-tag highlight">/cv-update-analyze</span>
+        <span class="week-tag" style="color:#94a3b8; font-size:12px;">競合 + AIO/関連KW分析</span>
+      </div>
+    </div>
+  </div>
+  <p style="font-size:13px; color:#64748b; margin-bottom: 8px;">※ /cv-update-edit は社員がQ列に採用番号を記入した後、随時実行</p>
+
+  <!-- ======== CV更新フロー全体 ======== -->
+  <h2>CV記事 更新フロー全体</h2>
+
+  <div class="flow">
+    <div class="flow-row">
+      <div class="flow-step claude">
+        <div class="step-label">Claude</div>
+        <div class="step-title">① /cv-update-urls</div>
+        <div class="step-desc">WebSearchで全記事の競合URL上位5件を取得・仕分け。前週差分を確認し、新規アフィリは重点分析。L列に書き込む。</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step intern">
+        <div class="step-label">インターン</div>
+        <div class="step-title">② F〜K列に入力</div>
+        <div class="step-desc">AIO（メイン/サブKW）・PAA・関連KWをスプシに入力する。（W2/W4のみ）</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step claude">
+        <div class="step-label">Claude</div>
+        <div class="step-title">③ /cv-update-analyze または /cv-update-heatmap</div>
+        <div class="step-desc">全記事を一括分析。N列（競合）・O列（AIO/関連KW）またはP列（ヒートマップ）に結果を書き込む。</div>
+      </div>
+    </div>
+    <div style="text-align:center; padding: 4px 0; color:#94a3b8; font-size:20px;">↓</div>
+    <div class="flow-row">
+      <div class="flow-step staff">
+        <div class="step-label">社員</div>
+        <div class="step-title">④ Q列に採用番号を記入</div>
+        <div class="step-desc">N/O/P列の分析結果を確認し、採用する改修ポイントの番号をQ列に記入する。</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step intern">
+        <div class="step-label">インターン</div>
+        <div class="step-title">⑤ /cv-update-edit</div>
+        <div class="step-desc">採用番号をもとにHTML差分を出力・WPに実装。完了後R列（実装完了日）が更新される。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== コマンド詳細 ======== -->
+  <h2>コマンド詳細（CV記事）</h2>
+
+  <div class="cmd-card">
+    <div class="cmd-header">
+      <span class="cmd-name">/cv-update-urls</span>
+      <span class="cmd-desc">毎週実行 ・ 競合URL取得・L列書き込み</span>
+    </div>
+    <div class="cmd-body">
+      <ul class="cmd-steps">
+        <li><span class="step-num purple">1</span><span>対象サイトを選択する</span></li>
+        <li><span class="step-num purple">2</span><span>スプシを読み込む（記事名・メインKW・前回L列）</span></li>
+        <li><span class="step-num purple">3</span><span>全記事のメインKWでWebSearchを並列実行 → 上位5URL取得・公式/アフィリ仕分け → 前週差分チェック → インターン確認</span></li>
+        <li><span class="step-num purple">4</span><span>L列に書き込む（上書き）・ログをmdに追記</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cmd-card">
+    <div class="cmd-header">
+      <span class="cmd-name">/cv-update-analyze</span>
+      <span class="cmd-desc">W2/W4実行 ・ 競合+AIO/関連KW一括分析 → N列・O列書き込み</span>
+    </div>
+    <div class="cmd-body">
+      <ul class="cmd-steps">
+        <li><span class="step-num blue">1</span><span>対象サイトを選択する</span></li>
+        <li><span class="step-num blue">2</span><span>スプシを読み込む（F〜K列・L列）。F〜K列が未入力の記事があれば入力を促す</span></li>
+        <li><span class="step-num blue">3</span><span>全記事を一括分析（L列をWebFetch・F〜K列を読んでギャップ分析）</span></li>
+        <li><span class="step-num blue">4</span><span>結果を一覧提示 → 確認 → N列・O列に上書き・ログをmdに追記</span></li>
+        <li><span class="step-num blue">5</span><span>Slack通知テキストを出力する</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cmd-card">
+    <div class="cmd-header">
+      <span class="cmd-name">/cv-update-heatmap</span>
+      <span class="cmd-desc">W3実行 ・ ヒートマップ分析 → P列書き込み</span>
+    </div>
+    <div class="cmd-body">
+      <ul class="cmd-steps">
+        <li><span class="step-num purple">1</span><span>対象サイトを選択する</span></li>
+        <li><span class="step-num purple">2</span><span>スプシを読み込む（記事一覧取得）</span></li>
+        <li><span class="step-num purple">3</span><span>記事ごとにClarityスクショ3枚（クリック・スクロール・アテンション）を受け取り → 即分析</span></li>
+        <li><span class="step-num purple">4</span><span>全記事の結果を一覧提示 → 確認 → P列に上書き・ログをmdに追記</span></li>
+        <li><span class="step-num purple">5</span><span>Slack通知テキストを出力する</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cmd-card">
+    <div class="cmd-header">
+      <span class="cmd-name">/cv-update-edit</span>
+      <span class="cmd-desc">社員承認後 随時実行 ・ HTML差分出力・WP実装</span>
+    </div>
+    <div class="cmd-body">
+      <ul class="cmd-steps">
+        <li><span class="step-num green">1</span><span>対象サイトを選択する</span></li>
+        <li><span class="step-num green">2</span><span>スプシを読み込む（Q列が入力済み・R列が空の記事を対象）</span></li>
+        <li><span class="step-num green">3</span><span>採用方針を確認して提示する</span></li>
+        <li><span class="step-num green">4</span><span>WPのHTMLを貼り付けてもらう</span></li>
+        <li><span class="step-num green">5</span><span>差分HTMLを出力する</span></li>
+        <li><span class="step-num green">6</span><span>WP実装完了後、R列（実装完了日）に書き込む</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ======== スプシ列構成 ======== -->
+  <h2>スプレッドシート 列構成（各サイト-CVタブ）</h2>
+
+  <table class="col-table">
+    <tr>
+      <th>列</th>
+      <th>内容</th>
+      <th>担当</th>
+      <th>タイミング</th>
+    </tr>
+    <tr>
+      <td>A〜E</td>
+      <td>記事名 / URL / メインKW / サブKW / 担当社員名</td>
+      <td><span class="col-who col-fixed">固定</span></td>
+      <td>初期設定時のみ</td>
+    </tr>
+    <tr>
+      <td>F〜K</td>
+      <td>AIO（メイン/サブ）/ PAA（メイン/サブ）/ 関連KW（メイン/サブ）</td>
+      <td><span class="col-who col-intern">インターン</span></td>
+      <td>W2/W4 分析前に入力</td>
+    </tr>
+    <tr>
+      <td>L</td>
+      <td>競合URL（上位5件）</td>
+      <td><span class="col-who col-claude">Claude</span></td>
+      <td>毎週 /cv-update-urls で上書き</td>
+    </tr>
+    <tr>
+      <td>M</td>
+      <td>更新完了日</td>
+      <td><span class="col-who col-claude">Claude</span></td>
+      <td>/cv-update-edit 完了時</td>
+    </tr>
+    <tr>
+      <td>N</td>
+      <td>競合分析からの改修ポイント</td>
+      <td><span class="col-who col-claude">Claude</span></td>
+      <td>W2/W4 /cv-update-analyze で上書き</td>
+    </tr>
+    <tr>
+      <td>O</td>
+      <td>AIO・関連KW改善ポイント</td>
+      <td><span class="col-who col-claude">Claude</span></td>
+      <td>W2/W4 /cv-update-analyze で上書き</td>
+    </tr>
+    <tr>
+      <td>P</td>
+      <td>ヒートマップ改善ポイント</td>
+      <td><span class="col-who col-claude">Claude</span></td>
+      <td>W3 /cv-update-heatmap で上書き</td>
+    </tr>
+    <tr>
+      <td>Q</td>
+      <td>社員対応番号</td>
+      <td><span class="col-who col-staff">社員</span></td>
+      <td>N/O/P確認後に記入</td>
+    </tr>
+    <tr>
+      <td>R</td>
+      <td>実装完了日</td>
+      <td><span class="col-who col-claude">Claude</span></td>
+      <td>/cv-update-edit 完了時</td>
+    </tr>
+  </table>
+
+  <p style="font-size:13px; color:#64748b; margin-top:10px;">※ 更新履歴は <code>logs/[サイト名]-cv-log.md</code> に追記される</p>
+
+  <!-- ======== ノウハウ更新フロー ======== -->
+  <h2>ノウハウ記事 更新フロー</h2>
+
+  <h3>週次グループ分け（ISO週番号で自動判定）</h3>
+  <div class="kh-grid">
+    <div class="kh-card">
+      <div class="kh-header odd">奇数週グループ</div>
+      <div class="kh-body">対象グループの記事を処理する。記事ごとに<strong>競合分析 / SERPチェック</strong>が交互に切り替わる（H列で管理）。</div>
+    </div>
+    <div class="kh-card">
+      <div class="kh-header even">偶数週グループ</div>
+      <div class="kh-body">対象グループの記事を処理する。記事ごとに<strong>競合分析 / SERPチェック</strong>が交互に切り替わる（H列で管理）。</div>
+    </div>
+  </div>
+
+  <div class="cmd-card">
+    <div class="cmd-header">
+      <span class="cmd-name">/knowhow-update</span>
+      <span class="cmd-desc">週1回実行 ・ ノウハウ記事 定期更新</span>
+    </div>
+    <div class="cmd-body">
+      <ul class="cmd-steps">
+        <li><span class="step-num purple">1</span><span>今週のグループを判定（奇数/偶数週）し、インターンに確認</span></li>
+        <li><span class="step-num blue">2</span><span><strong>今日は何本対応しますか？</strong> と確認 → スプシ読み込み → 更新完了日が古い順に対象記事を選択 → I列に「作業中」と仮ロック</span></li>
+        <li><span class="step-num purple">3a</span><span>【競合分析のとき】ClaudeがWebSearchで上位3件取得 → H2/H3比較 → ギャップ分析</span></li>
+        <li><span class="step-num blue">3b</span><span>【SERPチェックのとき】インターンがAIO/PAA/関連KWをチャットに貼り付け → ギャップ分析</span></li>
+        <li><span class="step-num purple">4</span><span>不足トピック候補を列挙 → インターンが1つ選ぶ（残りは次回以降に温存）</span></li>
+        <li><span class="step-num blue">5</span><span>インターンがWPのHTMLを貼り付ける</span></li>
+        <li><span class="step-num purple">6</span><span>差分HTMLを出力する</span></li>
+        <li><span class="step-num purple">7</span><span>WP実装完了後 → I列（更新完了日）・H列（次回タイプ切り替え）・J列（改修メモ）を書き込む</span></li>
+        <li><span class="step-num purple">8</span><span>記録フォーマットを出力する</span></li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
